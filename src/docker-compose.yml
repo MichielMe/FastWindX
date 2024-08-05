@@ -1,0 +1,44 @@
+services:
+  web:
+    build: .
+    command: uvicorn fastwindx.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=fastwindx
+      - POSTGRES_PASSWORD=fastwindx
+      - POSTGRES_DB=fastwindx
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=fastwindx
+      - POSTGRES_PASSWORD=fastwindx
+      - POSTGRES_DB=fastwindx
+
+  redis:
+    image: redis:6
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@fastwindx.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

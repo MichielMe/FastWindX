@@ -1,0 +1,38 @@
+<aside class="drawer-side z-10">
+  <label for="my-drawer" class="drawer-overlay"></label>
+  <!-- sidebar menu -->
+  <nav class="flex min-h-screen w-72 flex-col gap-2 overflow-y-auto bg-base-100 px-6 py-10">
+    <div class="mx-4 flex items-center gap-2 font-black">
+      <svg data-src="https://unpkg.com/heroicons/20/solid/home.svg" class="h-12 w-12"></svg>
+      Fast API Template
+    </div>
+    <ul class="menu">
+
+      <li>
+        <a href="{{ url_for('home') }}" class="{% if request.path == '/' %}active{% endif %}">
+          <svg data-src="https://unpkg.com/heroicons/20/solid/home.svg" class="h-5 w-5"></svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <svg data-src="https://unpkg.com/heroicons/20/solid/wallet.svg" class="h-5 w-5"></svg>
+          Todos
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline mt-10">
+
+          Logout
+        </a>
+      </li>
+
+
+    </ul>
+
+    <div class="flex-1">
+      <a href="{{ url_for('landing_page') }}" class="btn btn-ghost normal-case text-xl">FastWindX</a>
+    </div>
+  </nav>
+  <!-- /sidebar menu -->
+</aside>

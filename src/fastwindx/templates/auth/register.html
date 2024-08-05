@@ -1,0 +1,46 @@
+{% extends 'landing.html' %}
+
+{% block title %}Register - FastWindX{% endblock %}
+
+{% block content_landing %}
+<div class="card bg-base-100 w-1/2 shadow-xl mb-24 mx-auto mt-8" id="register-card">
+  <div class="card-body">
+    <h2 class="card-title">Register</h2>
+    <div id="message-area">
+      {% if msg %}
+      <div class="alert alert-error">
+        {{ msg }}
+      </div>
+      {% endif %}
+    </div>
+    <form class="form-control" hx-post="/register" hx-target="#register-card" hx-swap="outerHTML">
+      <div class="form-group mb-4 w-full">
+        <label for="username" class="label">Username</label>
+        <input type="text" id="username" name="username" class="input input-bordered w-full" required>
+      </div>
+      <div class="form-group mb-4 w-full">
+        <label for="email" class="label">Email</label>
+        <input type="email" id="email" name="email" class="input input-bordered w-full" required>
+      </div>
+      <div class="form-group mb-4 w-full">
+        <label for="password" class="label">Password</label>
+        <input type="password" id="password" name="password" class="input input-bordered w-full" required>
+      </div>
+      <div class="form-group mb-4 w-full">
+        <label for="first_name" class="label">First Name</label>
+        <input type="text" id="first_name" name="first_name" class="input input-bordered w-full" required>
+      </div>
+      <div class="form-group mb-4 w-full">
+        <label for="last_name" class="label">Last Name</label>
+        <input type="text" id="last_name" name="last_name" class="input input-bordered w-full" required>
+      </div>
+      <div class="form-group mb-4 w-full">
+        <label for="phone_number" class="label">Phone Number</label>
+        <input type="tel" id="phone_number" name="phone_number" class="input input-bordered w-full">
+      </div>
+      <button type="submit" class="btn btn-primary mb-4">Register</button>
+    </form>
+    <a href="{{ url_for('login_page') }}" class="btn btn-link justify-center">Already have an account? Login</a>
+  </div>
+</div>
+{% endblock %}
