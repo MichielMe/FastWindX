@@ -1,6 +1,6 @@
-# 🚀 FastWindX: The Ultimate Web Development Framework
+# 🚀 FastWindX
 
-![FastWindX Logo](https://via.placeholder.com/1200x300)
+![FastWindX Logo](logo.png)
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0-009688.svg)](https://fastapi.tiangolo.com)
