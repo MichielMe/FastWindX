@@ -1,6 +1,4 @@
-# FastWindX
-
-FastWindX is a state-of-the-art Single Page Application (SPA) framework using FastAPI and HTMX. It represents the pinnacle of modern Python web development practices, is highly modular, and ready for production use.
+# My project
 
 ## Features
 

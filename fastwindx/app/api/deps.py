@@ -5,10 +5,10 @@ from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from ..core.security import ALGORITHM, SECRET_KEY, oauth2_scheme
-from ..db.base import get_session
-from ..db.models.user import User
-from ..schemas.user import TokenData
+from app.core.security import ALGORITHM, SECRET_KEY, oauth2_scheme
+from app.db.base import get_session
+from app.db.models.user import User
+from app.schemas.user import TokenData
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:

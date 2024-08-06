@@ -1,26 +1,44 @@
-from setuptools import find_packages, setup
+from setuptools import setup
 
 setup(
     name="fastwindx",
     version="0.1.0",
-    packages=find_packages(exclude=["template*"]),
+    packages=[
+        "fastwindx",
+        "fastwindx.app",
+        "fastwindx.app.api",
+        "fastwindx.app.api.v1",
+        "fastwindx.app.api.v1.endpoints",
+        "fastwindx.app.core",
+        "fastwindx.app.db",
+        "fastwindx.app.db.models",
+        "fastwindx.app.schemas",
+        "fastwindx.app.services",
+        "fastwindx.app.static",
+        "fastwindx.app.templates",
+        "fastwindx.app.tests",
+        "fastwindx.app.tests.test_api",
+        "fastwindx.app.utils",
+        "fastwindx.app.views",
+    ],
     include_package_data=True,
     package_data={
-        "fastwindx": ["template/**/*"],
+        "fastwindx": ["**/*"],
     },
     install_requires=[
-        "fastapi>=0.95.0,<0.96.0",
-        "uvicorn>=0.20.0,<0.21.0",
-        "sqlmodel>=0.0.8,<0.1.0",
-        "alembic>=1.9.0,<2.0.0",
-        "pydantic>=2.0.0,<3.0.0",
-        "jinja2>=3.1.2,<3.2.0",
-        "python-dotenv>=0.19.0,<0.20.0",
-        "click>=8.0.0,<9.0.0",
+        "fastapi",
+        "uvicorn",
+        "sqlmodel",
+        "alembic",
+        "pydantic",
+        "pydantic-settings",
+        "jinja2",
+        "python-dotenv",
+        "click",
     ],
     entry_points={
         "console_scripts": [
-            "fastwindx=fastwindx.cli:main",
+            "fastwindx=fastwindx.app.cli:main",
         ],
     },
 )

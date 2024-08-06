@@ -1,3 +1,8 @@
 include LICENSE
 include README.md
-recursive-include fastwindx/template *
+include *.txt
+include fastwindx/**/*.py
+recursive-include fastwindx *
+recursive-include fastwindx *.html *.css *.js
+recursive-include fastwindx/static *
+recursive-include fastwindx/templates *

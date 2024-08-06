@@ -10,10 +10,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from fastwindx.api.v1.api import api_router
-from fastwindx.core.config import settings
-from fastwindx.db.base import init_db
-from fastwindx.views.main import router as main_router
+from app.api.v1.api import api_router
+from app.core.config import settings
+from app.db.base import init_db
+from app.views.main import router as main_router
 
 logger = logging.getLogger(__name__)
 

@@ -7,16 +7,16 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from ..api.deps import get_db
-from ..core.config import settings
-from ..core.security import (
+from app.api.deps import get_db
+from app.core.config import settings
+from app.core.security import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     create_access_token,
     get_password_hash,
     verify_password,
 )
-from ..db.models.user import User
-from ..schemas.user import UserCreate
+from app.db.models.user import User
+from app.schemas.user import UserCreate
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

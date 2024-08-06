@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 from sqlmodel import Session, SQLModel, create_engine
 
-from ..core.config import settings
+from app.core.config import settings
 
 # Create async engine
 async_engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=True, future=True)

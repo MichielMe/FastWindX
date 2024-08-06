@@ -4,7 +4,7 @@ Main router for the API v1.
 
 from fastapi import APIRouter
 
-from fastwindx.api.v1.endpoints import users
+from app.api.v1.endpoints import users
 
 api_router = APIRouter()
 

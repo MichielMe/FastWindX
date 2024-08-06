@@ -17,6 +17,12 @@ BLUE = "\033[34m"
 MAGENTA = "\033[35m"
 
 
+def ignore_files(dir, files):
+    """Specify files and directories to ignore when copying."""
+    exclude = {"cli.py", "__pycache__", "*.pyc", "*.pyo", "*.DS_Store"}
+    return {file for file in files if any(Path(file).match(pattern) for pattern in exclude)}
+
+
 def box_print(message, color=BLUE, padding=1):
     lines = message.split("\n")
     width = max(len(line) for line in lines)
@@ -90,19 +96,20 @@ def custom_help(ctx, param, value):
 
 @click.group()
 @click.option("--help", is_flag=True, callback=custom_help, expose_value=False, is_eager=True)
-def cli():
+def main():
     """FastWindX CLI tool for project management."""
+
     pass
 
 
-@cli.command()
+@main.command()
 @click.argument("project_name")
 def createprojectfull(project_name):
     """Create a new FastWindX project with dependencies."""
     print_logo()
     print_info(f"Creating new FastWindX project: {project_name}")
 
-    template_dir = Path(__file__).parent / "src"
+    template_dir = Path(__file__).parent.parent
 
     if not template_dir.exists():
         print_error(f"Template directory not found at {template_dir}")
@@ -111,7 +118,8 @@ def createprojectfull(project_name):
     project_path = Path(project_name)
     project_path.mkdir(exist_ok=True)
 
-    shutil.copytree(template_dir, project_path, dirs_exist_ok=True)
+    # Copy the entire content of the 'app' directory to the new project directory
+    shutil.copytree(template_dir, project_path, dirs_exist_ok=True, ignore=ignore_files)
 
     env = Environment(loader=FileSystemLoader(project_path))
 
@@ -158,14 +166,14 @@ def createprojectfull(project_name):
     print_command("docker-compose up\n\n")
 
 
-@cli.command()
+@main.command()
 @click.argument("project_name")
 def createproject(project_name):
     """Create a new FastWindX project without installing dependencies."""
     print_logo()
     print_info(f"Creating new FastWindX project: {project_name}")
 
-    template_dir = Path(__file__).parent / "src"
+    template_dir = Path(__file__).parent.parent
 
     if not template_dir.exists():
         print_error(f"Template directory not found at {template_dir}")
@@ -174,7 +182,8 @@ def createproject(project_name):
     project_path = Path(project_name)
     project_path.mkdir(exist_ok=True)
 
-    shutil.copytree(template_dir, project_path, dirs_exist_ok=True)
+    # Copy the entire content of the 'app' directory to the new project directory
+    shutil.copytree(template_dir, project_path, dirs_exist_ok=True, ignore=ignore_files)
 
     env = Environment(loader=FileSystemLoader(project_path))
 
@@ -214,16 +223,16 @@ def createproject(project_name):
     print_command("docker-compose up\n\n")
 
 
-@cli.command()
+@main.command()
 def run():
     """Run the FastWindX development server."""
     print_logo()
     print_info("Starting FastWindX development server...")
     try:
-        subprocess.run(["uvicorn", "main:app", "--reload"], check=True)
+        subprocess.run(["uvicorn", "app.main:app", "--reload"], check=True)
     except subprocess.CalledProcessError:
         print_error("Failed to start the development server. Please check your main.py file.")
 
 
 if __name__ == "__main__":
-    cli()
+    main()
