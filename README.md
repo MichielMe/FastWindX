@@ -152,14 +152,15 @@ docker-compose logs -f
 
 This Docker Compose setup provides a complete development environment, allowing you to focus on building your FastWindX application without worrying about database setup or management tools.
 
-## 📚 Documentation
+## 📚 Using Python build
 
-For detailed documentation, check out our [Wiki](https://github.com/yourusername/fastwindx/wiki).
+The package is build using the "build" package. To build the package, run the following command:
 
-- 🔧 [Configuration Guide](https://github.com/yourusername/fastwindx/wiki/Configuration)
-- 🗃️ [Database Migrations](https://github.com/yourusername/fastwindx/wiki/Database-Migrations)
-- 🚢 [Deployment Guide](https://github.com/yourusername/fastwindx/wiki/Deployment)
-- 🧪 [Testing](https://github.com/yourusername/fastwindx/wiki/Testing)
+```bash
+python -m build --sdist --wheel ./
+```
+
+This will create a `dist` folder with the `.tar.gz` and `.whl` files.
 
 ## 🤝 Contributing
 
