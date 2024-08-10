@@ -56,6 +56,16 @@ static-code-qa = ["pre-commit"]
 include = ["fastwindx"]
 exclude = ["node_modules", "venv"]
 
+[project.scripts]
+fastwindx = "fastwindx.app.cli:main"
+
+[tool.setuptools.package-data]
+fastwindx = ["**/*"]
+"*" = ["LICENSE", "README.md", "*.txt", "*.yml", "Dockerfile"]
+
+[tool.setuptools.exclude-package-data]
+fastwindx = ["venv", "node_modules", "__pycache__"]
+
 [tool.flake8]
 docstring-convention = "all"
 ignore = ["D107", "D212", "E501", "W503", "W605", "D203", "D100"]
