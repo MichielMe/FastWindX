@@ -1,0 +1,35 @@
+<!-- card -->
+<section class="col-span-12 xl:col-span-4">
+  <div class="form-control">
+    <label class="label">
+      <span class="label-text">Size (cm)</span>
+    </label>
+    <div class="flex items-center gap-2">
+      <input type="text" placeholder="Width" class="input input-bordered w-1/2" />
+      ×
+      <input type="text" placeholder="Height" class="input input-bordered w-1/2" />
+    </div>
+  </div>
+  <div class="form-control">
+    <div class="py-4 text-xs text-base-content/70">
+      Set a audience range for this product.
+      <br />
+      This is optional
+    </div>
+    <input type="range" min="0" max="100" value="25" class="range range-xs" step="25" />
+    <div class="flex w-full justify-between px-2 py-2 text-xs">
+      <span>0</span>
+      <span>25</span>
+      <span>50</span>
+      <span>75</span>
+      <span>100</span>
+    </div>
+  </div>
+  <div class="form-control">
+    <div class="flex gap-4 py-4">
+      <button class="btn btn-outline">Save draft</button>
+      <button class="btn btn-primary grow">Save and publish</button>
+    </div>
+  </div>
+</section>
+<!-- /card -->
