@@ -5,10 +5,14 @@ Database configuration and session management for FastWindX.
 import asyncio
 from contextlib import asynccontextmanager
 
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy_utils import create_database, database_exists
-from sqlmodel import Session, SQLModel, create_engine
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import database_exists
+from sqlmodel import Session
+from sqlmodel import SQLModel
+from sqlmodel import create_engine
 
 from app.core.config import settings
 
@@ -16,9 +20,7 @@ from app.core.config import settings
 async_engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=True, future=True)
 
 # Create sync engine for Alembic migrations and database creation
-sync_engine = create_engine(
-    settings.SQLALCHEMY_DATABASE_URI.replace("+asyncpg", ""), echo=True, future=True
-)
+sync_engine = create_engine(settings.SQLALCHEMY_DATABASE_URI.replace("+asyncpg", ""), echo=True, future=True)
 
 # Export sync_engine as engine for compatibility
 engine = sync_engine

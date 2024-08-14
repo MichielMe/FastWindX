@@ -1,22 +1,25 @@
 from datetime import timedelta
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from fastapi import status
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlmodel import Session, select
+from sqlmodel import Session
+from sqlmodel import select
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user
+from app.api.deps import get_db
 from app.db.models.user import User
 from app.schemas.user import Token
 from app.schemas.user import User as UserSchema
 from app.schemas.user import UserCreate
 
-from ....core.security import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    create_access_token,
-    get_password_hash,
-    verify_password,
-)
+from ....core.security import ACCESS_TOKEN_EXPIRE_MINUTES
+from ....core.security import create_access_token
+from ....core.security import get_password_hash
+from ....core.security import verify_password
 
 router = APIRouter()
 
@@ -57,9 +60,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
-):
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     OAuth2 compatible token login, get an access token for future requests.
     """
@@ -136,9 +137,7 @@ async def read_users(
 
 
 @router.get("/users/{user_id}", response_model=UserSchema)
-async def read_user(
-    user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
-):
+async def read_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
     Get a specific user by id.
     """
@@ -151,9 +150,7 @@ async def read_user(
 
 
 @router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(
-    user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
-):
+async def delete_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
     Delete a user.
     """

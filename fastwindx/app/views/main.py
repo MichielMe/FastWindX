@@ -1,30 +1,24 @@
 import logging
 from datetime import timedelta
 
-from app.api.deps import get_db
-from app.core.config import settings
-from app.core.security import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    create_access_token,
-    get_password_hash,
-    verify_password,
-)
-from app.db.models.user import User
-from app.schemas.user import UserCreate
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException,
-    Request,
-    status,
-)
-from fastapi.responses import (
-    HTMLResponse,
-    RedirectResponse,
-)
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import Request
+from fastapi import status
+from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+
+from app.api.deps import get_db
+from app.core.config import settings
+from app.core.security import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.security import create_access_token
+from app.core.security import get_password_hash
+from app.core.security import verify_password
+from app.db.models.user import User
+from app.schemas.user import UserCreate
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

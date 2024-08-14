@@ -20,15 +20,11 @@ class DatabaseException(FastWindXException):
     Exception raised for database-related errors.
     """
 
-    pass
-
 
 class AuthenticationException(FastWindXException):
     """
     Exception raised for authentication-related errors.
     """
-
-    pass
 
 
 class ValidationException(FastWindXException):
@@ -36,12 +32,8 @@ class ValidationException(FastWindXException):
     Exception raised for data validation errors.
     """
 
-    pass
-
 
 class NotFoundException(FastWindXException):
     """
     Exception raised when a requested resource is not found.
     """
-
-    pass

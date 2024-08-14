@@ -1,10 +1,10 @@
-import os
 import shutil
 import subprocess
 from pathlib import Path
 
 import click
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 
 # ANSI color codes
 RESET = "\033[0m"
@@ -44,8 +44,8 @@ def print_logo():
     logo = f"""
 {MAGENTA}███████╗ █████╗ ███████╗████████╗██╗    ██╗██╗███╗   ██╗██████╗ ██╗  ██╗
 ██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║    ██║██║████╗  ██║██╔══██╗╚██╗██╔╝
-█████╗  ███████║███████╗   ██║   ██║ █╗ ██║██║██╔██╗ ██║██║  ██║ ╚███╔╝ 
-██╔══╝  ██╔══██║╚════██║   ██║   ██║███╗██║██║██║╚██╗██║██║  ██║ ██╔██╗ 
+█████╗  ███████║███████╗   ██║   ██║ █╗ ██║██║██╔██╗ ██║██║  ██║ ╚███╔╝
+██╔══╝  ██╔══██║╚════██║   ██║   ██║███╗██║██║██║╚██╗██║██║  ██║ ██╔██╗
 ██║     ██║  ██║███████║   ██║   ╚███╔███╔╝██║██║ ╚████║██████╔╝██╔╝ ██╗
 ╚═╝     ╚═╝  ╚═╝╚══════╝   ╚═╝    ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝
 {CYAN}                        :: FastWindX CLI ::{RESET}
@@ -99,8 +99,6 @@ def custom_help(ctx, param, value):
 def main():
     """FastWindX CLI tool for project management."""
 
-    pass
-
 
 @main.command()
 @click.argument("project_name")
@@ -151,9 +149,7 @@ def createprojectfull(project_name):
         subprocess.run(["npm", "install"], cwd=project_path, check=True)
         subprocess.run(["npm", "run", "build:css"], cwd=project_path, check=True)
     except subprocess.CalledProcessError:
-        print_error(
-            "Failed to install npm packages or build CSS. Please check your package.json file."
-        )
+        print_error("Failed to install npm packages or build CSS. Please check your package.json file.")
         return
 
     print_success(f"Project {project_name} created successfully!")

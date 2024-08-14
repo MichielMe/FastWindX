@@ -5,10 +5,15 @@ Core configuration module for FastWindX.
 import logging
 import secrets
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
 
-from pydantic import AnyUrl, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import AnyUrl
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
+from pydantic_settings import SettingsConfigDict
 
 logger = logging.getLogger(__name__)
 

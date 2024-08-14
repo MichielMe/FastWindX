@@ -1,16 +1,12 @@
-import os
 import shutil
 import subprocess
 from pathlib import Path
 
 import click
-from jinja2 import (
-    Environment,
-    FileSystemLoader,
-)
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 from rich import box
 from rich.console import Console
-from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.text import Text
 
@@ -39,8 +35,8 @@ def print_logo():
     logo = """
 ███████╗ █████╗ ███████╗████████╗██╗    ██╗██╗███╗   ██╗██████╗ ██╗  ██╗
 ██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║    ██║██║████╗  ██║██╔══██╗╚██╗██╔╝
-█████╗  ███████║███████╗   ██║   ██║ █╗ ██║██║██╔██╗ ██║██║  ██║ ╚███╔╝ 
-██╔══╝  ██╔══██║╚════██║   ██║   ██║███╗██║██║██║╚██╗██║██║  ██║ ██╔██╗ 
+█████╗  ███████║███████╗   ██║   ██║ █╗ ██║██║██╔██╗ ██║██║  ██║ ╚███╔╝
+██╔══╝  ██╔══██║╚════██║   ██║   ██║███╗██║██║██║╚██╗██║██║  ██║ ██╔██╗
 ██║     ██║  ██║███████║   ██║   ╚███╔███╔╝██║██║ ╚████║██████╔╝██╔╝ ██╗
 ╚═╝     ╚═╝  ╚═╝╚══════╝   ╚═╝    ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝
                         :: FastWindX CLI ::
@@ -94,7 +90,6 @@ def custom_help(ctx, param, value):
 @click.option("--help", is_flag=True, callback=custom_help, expose_value=False, is_eager=True)
 def main():
     """FastWindX CLI tool for project management."""
-    pass
 
 
 @main.command()
