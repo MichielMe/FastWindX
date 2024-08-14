@@ -1,12 +1,6 @@
 import logging
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
-
 from app.api.deps import get_db
 from app.core.config import settings
 from app.core.security import (
@@ -17,6 +11,20 @@ from app.core.security import (
 )
 from app.db.models.user import User
 from app.schemas.user import UserCreate
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException,
+    Request,
+    status,
+)
+from fastapi.responses import (
+    HTMLResponse,
+    RedirectResponse,
+)
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -84,14 +92,12 @@ async def register(request: Request, db: AsyncSession = Depends(get_db)):
             phone_number=form.get("phone_number", ""),
         )
     except ValueError as e:
-        return templates.TemplateResponse(
-            "register.html", {"request": request, "msg": str(e)}, status_code=400
-        )
+        return templates.TemplateResponse("auth/register.html", {"request": request, "msg": str(e)}, status_code=400)
 
     result = await db.execute(select(User).where(User.email == user.email))
     if result.scalar_one_or_none():
         return templates.TemplateResponse(
-            "register.html",
+            "auth/register.html",
             {"request": request, "msg": "Email already registered"},
             status_code=400,
         )
@@ -124,17 +130,13 @@ async def register(request: Request, db: AsyncSession = Depends(get_db)):
         expires_delta=access_token_expires,
     )
 
-    response = RedirectResponse(
-        url="/login?msg=User successfully created", status_code=status.HTTP_302_FOUND
-    )
+    response = RedirectResponse(url="/login?msg=User successfully created", status_code=status.HTTP_302_FOUND)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
     return response
 
 
 @router.get("/logout")
 async def logout(request: Request):
-    response = RedirectResponse(
-        url="/login?msg=Logout Successful", status_code=status.HTTP_302_FOUND
-    )
+    response = RedirectResponse(url="/login?msg=Logout Successful", status_code=status.HTTP_302_FOUND)
     response.delete_cookie("access_token")
     return response

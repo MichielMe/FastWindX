@@ -10,7 +10,7 @@ authors = [
 	{ name = "Michiel M" }
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 license = {text = "MIT"}
 keywords = ["fastapi", "htmx", "tailwindcss", "daisyui", "web", "app", "template", "skeleton", "project", "boilerplate"]
 classifiers = [
@@ -34,22 +34,23 @@ classifiers = [
 ]
 
 dependencies = [
-	"fastapi",
-	"uvicorn",
-	"sqlmodel",
-	"alembic",
-	"pydantic",
-	"pydantic-settings",
-	"jinja2",
-	"python-dotenv",
-	"click",
+	"fastapi>=0.112.0,<0.113.0",
+	"uvicorn>=0.30.6,<1.0.0",
+	"sqlmodel>=0.0.21,<0.1.0",
+	"alembic>=1.13.2,<2.0.0",
+	"pydantic>=2.8.2,<3.0.0",
+	"pydantic-settings>=2.4.0,<3.0.0",
+	"jinja2>=3.1.4,<4.0.0",
+	"python-dotenv>=1.0.1,<2.0.0",
+	"click>=8.1.7,<9.0.0",
 ]
 
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov"]
-release = ["build", "twine"]
-static-code-qa = ["pre-commit"]
+dev = [ "build", "black", "isort", "pre-commit", "ruff", "wheel"]
+colors = ["rich"]
+release = ["build"]
 
 [tool.setuptools.packages.find]
 # This will include only the `fastwindx` package and exclude `node_modules`
