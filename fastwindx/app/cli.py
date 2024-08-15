@@ -1,10 +1,10 @@
 import shutil
 import subprocess
 from pathlib import Path
+from typing import Any, List, Set
 
 import click
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 
 # ANSI color codes
 RESET = "\033[0m"
@@ -17,13 +17,13 @@ BLUE = "\033[34m"
 MAGENTA = "\033[35m"
 
 
-def ignore_files(dir, files):
+def ignore_files(dir: str, files: List[str]) -> Set[str]:
     """Specify files and directories to ignore when copying."""
     exclude = {"cli.py", "__pycache__", "*.pyc", "*.pyo", "*.DS_Store"}
     return {file for file in files if any(Path(file).match(pattern) for pattern in exclude)}
 
 
-def box_print(message, color=BLUE, padding=1):
+def box_print(message: str, color: str = BLUE, padding: int = 1) -> None:
     lines = message.split("\n")
     width = max(len(line) for line in lines)
     box_width = width + 2 * padding + 2
@@ -40,7 +40,7 @@ def box_print(message, color=BLUE, padding=1):
     print(top_bottom)
 
 
-def print_logo():
+def print_logo() -> None:
     logo = f"""
 {MAGENTA}███████╗ █████╗ ███████╗████████╗██╗    ██╗██╗███╗   ██╗██████╗ ██╗  ██╗
 ██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║    ██║██║████╗  ██║██╔══██╗╚██╗██╔╝
@@ -53,28 +53,28 @@ def print_logo():
     print(logo)
 
 
-def print_success(message):
+def print_success(message: str) -> None:
     print(f"\n{GREEN}✅ {BOLD}{message}{RESET}")
 
 
-def print_error(message):
+def print_error(message: str) -> None:
     print(f"\n{RED}❌ {BOLD}Error: {message}{RESET}")
 
 
-def print_info(message):
+def print_info(message: str) -> None:
     print(f"\n{CYAN}ℹ️ {message}{RESET}")
 
 
-def print_command(command):
+def print_command(command: str) -> None:
     print(f"{YELLOW}  $ {command}{RESET}")
 
 
-def print_header(message):
+def print_header(message: str) -> None:
     print(f"\n\n{BLUE}{BOLD}{message}{RESET}")
     print(f"{BLUE}{'─' * len(message)}{RESET}")
 
 
-def custom_help(ctx, param, value):
+def custom_help(ctx: click.Context, param: click.Parameter, value: Any) -> None:
     if not value or ctx.resilient_parsing:
         return
     print_logo()
@@ -96,13 +96,13 @@ def custom_help(ctx, param, value):
 
 @click.group()
 @click.option("--help", is_flag=True, callback=custom_help, expose_value=False, is_eager=True)
-def main():
+def main() -> None:
     """FastWindX CLI tool for project management."""
 
 
 @main.command()
 @click.argument("project_name")
-def createprojectfull(project_name):
+def createprojectfull(project_name: str) -> None:
     """Create a new FastWindX project with dependencies."""
     print_logo()
     print_info(f"Creating new FastWindX project: {project_name}")
@@ -119,7 +119,7 @@ def createprojectfull(project_name):
     # Copy the entire content of the 'app' directory to the new project directory
     shutil.copytree(template_dir, project_path, dirs_exist_ok=True, ignore=ignore_files)
 
-    env = Environment(loader=FileSystemLoader(project_path))
+    env = Environment(loader=FileSystemLoader(project_path), autoescape=True)
 
     for file_path in project_path.rglob("*"):
         if file_path.is_file() and file_path.suffix in (".py", ".yml", ".md"):
@@ -130,7 +130,7 @@ def createprojectfull(project_name):
 
     templates_dir = project_path / "templates"
     if templates_dir.exists():
-        env = Environment(loader=FileSystemLoader(templates_dir))
+        env = Environment(loader=FileSystemLoader(templates_dir), autoescape=True)
         for file_path in templates_dir.rglob("*.html"):
             relative_path = file_path.relative_to(templates_dir)
             template = env.get_template(str(relative_path))
@@ -164,7 +164,7 @@ def createprojectfull(project_name):
 
 @main.command()
 @click.argument("project_name")
-def createproject(project_name):
+def createproject(project_name: str) -> None:
     """Create a new FastWindX project without installing dependencies."""
     print_logo()
     print_info(f"Creating new FastWindX project: {project_name}")
@@ -181,7 +181,7 @@ def createproject(project_name):
     # Copy the entire content of the 'app' directory to the new project directory
     shutil.copytree(template_dir, project_path, dirs_exist_ok=True, ignore=ignore_files)
 
-    env = Environment(loader=FileSystemLoader(project_path))
+    env = Environment(loader=FileSystemLoader(project_path), autoescape=True)
 
     for file_path in project_path.rglob("*"):
         if file_path.is_file() and file_path.suffix in (".py", ".yml", ".md"):
@@ -192,7 +192,7 @@ def createproject(project_name):
 
     templates_dir = project_path / "templates"
     if templates_dir.exists():
-        env = Environment(loader=FileSystemLoader(templates_dir))
+        env = Environment(loader=FileSystemLoader(templates_dir), autoescape=True)
         for file_path in templates_dir.rglob("*.html"):
             relative_path = file_path.relative_to(templates_dir)
             template = env.get_template(str(relative_path))
@@ -220,7 +220,7 @@ def createproject(project_name):
 
 
 @main.command()
-def run():
+def run() -> None:
     """Run the FastWindX development server."""
     print_logo()
     print_info("Starting FastWindX development server...")

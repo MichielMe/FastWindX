@@ -4,20 +4,22 @@ Database configuration and session management for FastWindX.
 
 import asyncio
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy_utils import create_database
-from sqlalchemy_utils import database_exists
-from sqlmodel import Session
-from sqlmodel import SQLModel
-from sqlmodel import create_engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy_utils import create_database, database_exists
+from sqlmodel import SQLModel, create_engine
 
 from app.core.config import settings
 
+# Ensure SQLALCHEMY_DATABASE_URI is a string
+if settings.SQLALCHEMY_DATABASE_URI is None:
+    raise ValueError("SQLALCHEMY_DATABASE_URI must be set")
+
 # Create async engine
-async_engine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=True, future=True)
+async_engine: AsyncEngine = create_async_engine(settings.SQLALCHEMY_DATABASE_URI, echo=True, future=True)
 
 # Create sync engine for Alembic migrations and database creation
 sync_engine = create_engine(settings.SQLALCHEMY_DATABASE_URI.replace("+asyncpg", ""), echo=True, future=True)
@@ -25,10 +27,17 @@ sync_engine = create_engine(settings.SQLALCHEMY_DATABASE_URI.replace("+asyncpg",
 # Export sync_engine as engine for compatibility
 engine = sync_engine
 
-async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
+# Create async session factory
+AsyncSessionLocal = async_sessionmaker(
+    async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autocommit=False,
+    autoflush=False,
+)
 
 
-def create_db_if_not_exists():
+def create_db_if_not_exists() -> None:
     """
     Create the database if it doesn't exist using synchronous operations.
     """
@@ -36,7 +45,7 @@ def create_db_if_not_exists():
         create_database(sync_engine.url)
 
 
-async def init_db():
+async def init_db() -> None:
     """
     Initialize the database by creating it if it doesn't exist and then creating all tables.
     """
@@ -50,18 +59,22 @@ async def init_db():
 
 
 @asynccontextmanager
-async def get_session():
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """Yield an async session."""
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         try:
             yield session
+            await session.commit()
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
         finally:
             await session.close()
 
 
-def get_sync_session():
+def get_sync_session() -> Session:
     """
     Function to get a synchronous SQLAlchemy session.
     This is mainly used for database migrations with Alembic.
     """
-    return Session(sync_engine)
+    return sessionmaker(bind=sync_engine, autocommit=False, autoflush=False)()

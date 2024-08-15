@@ -1,20 +1,28 @@
+create_venv:
+	/bin/bash ./run.sh create_venv
+
+activate_venv:
+	/bin/bash ./run.sh activate_venv
+
+install:
+	/bin/bash ./run.sh install
+
+update_hooks:
+	/bin/bash ./run.sh update_hooks
+
+lint:
+	/bin/bash ./run.sh lint
+
+before_build: create_venv install update_hooks lint
+
 build:
-	python -m build --sdist --wheel ./
-	echo "Build complete."
+	/bin/bash ./run.sh build
 
-remove-package:
-	rm -r build/ dist/ *.egg-info/ *.dist-info/ *.cache
-	echo "Package removed."
+publish_test:
+	/bin/bash ./run.sh publish:test
 
-clean-up:
-	# Remove cache files
-	find . -type f -name '*.cache' -exec rm -f {} +
+release_test:
+	/bin/bash ./run.sh release:test
 
-	# Remove .dist-info directories
-	find . -type d -name '*.dist-info' -exec rm -rf {} +
-
-	# Remove .egg-info directories
-	find . -type d -name '*.egg-info' -exec rm -rf {} +
-
-	echo "Cleanup complete."
-
+clean:
+	/bin/bash ./run.sh clean

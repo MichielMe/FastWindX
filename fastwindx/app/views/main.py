@@ -1,22 +1,16 @@
 import logging
 from datetime import timedelta
+from typing import Optional
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import Request
-from fastapi import status
-from fastapi.responses import HTMLResponse
-from fastapi.responses import RedirectResponse
+from fastapi import APIRouter, Depends, Form, Request, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from app.api.deps import get_db
 from app.core.config import settings
-from app.core.security import ACCESS_TOKEN_EXPIRE_MINUTES
-from app.core.security import create_access_token
-from app.core.security import get_password_hash
-from app.core.security import verify_password
+from app.core.security import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_password_hash, verify_password
 from app.db.models.user import User
 from app.schemas.user import UserCreate
 
@@ -27,26 +21,24 @@ templates = Jinja2Templates(directory=settings.TEMPLATES_DIR)
 
 
 @router.get("/", response_class=HTMLResponse)
-async def landing_page(request: Request):
+async def landing_page(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("landing.html", {"request": request})
 
 
 @router.get("/home", response_class=HTMLResponse)
-async def home(request: Request):
+async def home(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @router.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request, msg: str = None):
+async def login_page(request: Request, msg: Optional[str] = None) -> HTMLResponse:
     return templates.TemplateResponse("auth/login.html", {"request": request, "msg": msg})
 
 
 @router.post("/login")
-async def login(request: Request, db: AsyncSession = Depends(get_db)):
-    form = await request.form()
-    email = form.get("email")
-    password = form.get("password")
-
+async def login(
+    request: Request, email: str = Form(...), password: str = Form(...), db: AsyncSession = Depends(get_db)
+) -> HTMLResponse | RedirectResponse:
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
     if not user or not verify_password(password, user.hashed_password):
@@ -68,22 +60,30 @@ async def login(request: Request, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/register", response_class=HTMLResponse)
-async def register_page(request: Request):
+async def register_page(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("auth/register.html", {"request": request})
 
 
 @router.post("/register", response_class=HTMLResponse)
-async def register(request: Request, db: AsyncSession = Depends(get_db)):
-    form = await request.form()
+async def register(
+    request: Request,
+    username: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    first_name: str = Form(...),
+    last_name: str = Form(...),
+    phone_number: str = Form(""),
+    db: AsyncSession = Depends(get_db),
+) -> HTMLResponse | RedirectResponse:
     try:
         user = UserCreate(
-            username=form.get("username"),
-            email=form.get("email"),
-            password=form.get("password"),
-            first_name=form.get("first_name"),
-            last_name=form.get("last_name"),
+            username=username,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
             role="user",
-            phone_number=form.get("phone_number", ""),
+            phone_number=phone_number,
         )
     except ValueError as e:
         return templates.TemplateResponse("auth/register.html", {"request": request, "msg": str(e)}, status_code=400)
@@ -130,7 +130,7 @@ async def register(request: Request, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/logout")
-async def logout(request: Request):
+async def logout(request: Request) -> RedirectResponse:
     response = RedirectResponse(url="/login?msg=Logout Successful", status_code=status.HTTP_302_FOUND)
     response.delete_cookie("access_token")
     return response

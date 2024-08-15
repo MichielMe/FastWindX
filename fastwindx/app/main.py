@@ -5,6 +5,7 @@ Main application module for FastWindX.
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import AsyncGenerator, Dict
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
     Lifespan context manager for the FastAPI app.
     """
@@ -57,7 +58,7 @@ app.include_router(main_router)
 
 
 @app.get("/health")
-async def health():
+async def health() -> Dict[str, str]:
     """
     Health check endpoint.
     """

@@ -5,6 +5,12 @@ set -e # Exit on error
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 VENV_DIR="${THIS_DIR}/venv"
 
+function load-dotenv {
+    while read -r line; do
+        export "$line"
+    done < <(grep -v '^#' "${THIS_DIR}/.env" | grep -v '^$')
+}
+
 function create_venv {
     echo "Creating virtual environment..."
     python3 -m venv "${VENV_DIR}"
@@ -46,17 +52,45 @@ function build {
     python -m build --sdist --wheel "${THIS_DIR}/"
 }
 
-function publish_test {
+function publish:test {
     activate_venv
+    load-dotenv
     echo "Publishing to Test PyPI..."
-    twine upload --repository testpypi "${THIS_DIR}/dist/*"
+    twine upload "${THIS_DIR}/dist/*" \
+        --repository testpypi \
+        --username=__token__ \
+        --password="${TEST_PYPI_TOKEN}"
+}
+
+function publish:prod {
+    activate_venv
+    load-dotenv
+    echo "Publishing to Test PyPI..."
+    twine upload "${THIS_DIR}/dist/*" \
+        --repository pypi \
+        --username=__token__ \
+        --password="${PROD_PYPI_TOKEN}"
+}
+
+function release:test {
+    lint
+    clean
+    build
+    publish:test
+}
+
+function release:prod {
+    release:test
+    publish:prod
 }
 
 function clean {
     echo "Cleaning up..."
     rm -rf "${THIS_DIR}/dist" "${THIS_DIR}/build" "${THIS_DIR}/*.egg-info"
-    rm -rf "${THIS_DIR}/.mypy_cache" "${THIS_DIR}/.pytest_cache" "${THIS_DIR}/.tox"
+    rm -rf "${THIS_DIR}/.pytest_cache" "${THIS_DIR}/.tox"
     find "${THIS_DIR}" -type d -name "__pycache__" -exec rm -rf {} +
+    find "${THIS_DIR}" -type d -name ".mypy_cache" -exec rm -rf {} +
+    find . -type d -name '*.egg-info' -exec rm -rf {} +
 }
 
 function help {

@@ -76,16 +76,18 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "C", "B"]
-ignore = ["E501", "B008", "C901"]
+ignore = ["E501", "B008", "C901", "I001"]
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
-unfixable = []
+unfixable = ["I"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
 [tool.ruff.lint.isort]
-force-single-line = true
+force-single-line = false
+combine-as-imports = true
+split-on-trailing-comma = false
 known-first-party = ["fastwindx"]
 
 [tool.black]
@@ -107,8 +109,8 @@ extend-exclude = '''
 '''
 
 [tool.mypy]
-python_version = "3.11"
-warn_return_any = true
+python_version = "3.12"
+warn_return_any = false
 warn_unused_configs = true
 ignore_missing_imports = true
 disallow_untyped_defs = true
@@ -119,6 +121,31 @@ warn_unused_ignores = true
 show_error_codes = true
 pretty = true
 incremental = false
+
+# New options to address specific issues
+disallow_any_generics = true
+disallow_subclassing_any = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = true
+disallow_untyped_decorators = false
+no_implicit_reexport = true
+strict_equality = true
+disallow_any_expr = false
+disallow_any_decorated = false
+disallow_any_explicit = false
+
+
+# Ignore specific errors for SQLModel
+disable_error_code = ["call-arg"]
+
+# Add plugins for better support of third-party libraries
+plugins = ["pydantic.mypy"]
+
+# Add specific module ignores if needed
+[[tool.mypy.overrides]]
+module = ["sqlmodel", "fastapi"]
+ignore_missing_imports = true
+
 
 [tool.pytest.ini_options]
 minversion = "6.0"

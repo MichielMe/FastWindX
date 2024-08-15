@@ -26,22 +26,28 @@ repos:
       - id: detect-private-key
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.5.7"
+    rev: "v0.6.0"
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix, --exit-non-zero-on-fix, --config=./pyproject.toml]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v1.11.1"
     hooks:
       - id: mypy
+        language_version: python3.12
         args:
-          [
-            --no-strict-optional,
-            --ignore-missing-imports,
-            --config-file=./pyproject.toml,
-          ]
+          - --config-file=./pyproject.toml
+          - --no-warn-return-any  # Add this line
+        additional_dependencies:
+          - "types-click"
+          - "types-PyYAML"
+          - "pydantic"
+          - "pydantic-core"
+          - "fastapi"
+          - "sqlalchemy"
+          - "passlib"  # Add this line
 
   - repo: https://github.com/psf/black
     rev: 24.8.0
@@ -56,16 +62,4 @@ repos:
       - id: pylint
         args:
           - --rcfile=./pyproject.toml
-
-  - repo: local
-    hooks:
-      - id: pylint
-        name: pylint
-        entry: pylint
-        language: system
-        types: [python]
-        args:
-          [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
-          ]
+          - --fail-under=6

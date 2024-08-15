@@ -21,6 +21,10 @@ class User(BaseModel):
     is_active: bool
     phone_number: str
 
+    class Config:
+        orm_mode = True
+        from_attributes = True
+
 
 class Token(BaseModel):
     access_token: str
