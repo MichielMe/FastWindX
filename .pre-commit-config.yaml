@@ -39,7 +39,7 @@ repos:
         language_version: python3.12
         args:
           - --config-file=./pyproject.toml
-          - --no-warn-return-any  # Add this line
+          - --no-warn-return-any
         additional_dependencies:
           - "types-click"
           - "types-PyYAML"
@@ -47,7 +47,7 @@ repos:
           - "pydantic-core"
           - "fastapi"
           - "sqlalchemy"
-          - "passlib"  # Add this line
+          - "passlib"
 
   - repo: https://github.com/psf/black
     rev: 24.8.0
@@ -62,4 +62,4 @@ repos:
       - id: pylint
         args:
           - --rcfile=./pyproject.toml
-          - --fail-under=6
+          - --fail-under=9

@@ -6,13 +6,22 @@ build-backend = "setuptools.build_meta"
 name = "fastwindx"
 version = "0.1.0"
 description = "Web app template made with FastAPI, HTMX, Tailwind CSS, and DaisyUI."
-authors = [
-    { name = "Michiel M" }
-]
+authors = [{ name = "Michiel M" }]
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
-keywords = ["fastapi", "htmx", "tailwindcss", "daisyui", "web", "app", "template", "skeleton", "project", "boilerplate"]
+license = { text = "MIT" }
+keywords = [
+    "fastapi",
+    "htmx",
+    "tailwindcss",
+    "daisyui",
+    "web",
+    "app",
+    "template",
+    "skeleton",
+    "project",
+    "boilerplate",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -41,7 +50,7 @@ dependencies = [
     "jinja2==3.1.4",
     "python-dotenv==1.0.1",
     "click==8.1.7",
-    "python-jose==3.3.0"
+    "python-jose==3.3.0",
 ]
 
 [project.optional-dependencies]
@@ -66,10 +75,26 @@ fastwindx = ["venv", "node_modules", "__pycache__"]
 
 [tool.ruff]
 exclude = [
-    ".bzr", ".direnv", ".eggs", ".git", ".hg", ".mypy_cache",
-    ".nox", ".pants.d", ".pytype", ".ruff_cache", ".svn",
-    ".tox", ".venv", "__pypackages__", "_build", "buck-out",
-    "build", "dist", "node_modules", "venv",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
 ]
 line-length = 119
 target-version = "py311"
@@ -77,7 +102,6 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "C", "B"]
 ignore = ["E501", "B008", "C901", "I001"]
-fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
 unfixable = ["I"]
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
@@ -96,15 +120,7 @@ target-version = ['py311']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-  | venv
+  \.eggs|\.git|\.hg|\.mypy_cache|\.tox|\.venv|build|dist|venv
 )/
 '''
 
@@ -121,31 +137,16 @@ warn_unused_ignores = true
 show_error_codes = true
 pretty = true
 incremental = false
-
-# New options to address specific issues
 disallow_any_generics = true
-disallow_subclassing_any = false
-disallow_untyped_calls = false
 disallow_incomplete_defs = true
-disallow_untyped_decorators = false
 no_implicit_reexport = true
 strict_equality = true
-disallow_any_expr = false
-disallow_any_decorated = false
-disallow_any_explicit = false
-
-
-# Ignore specific errors for SQLModel
 disable_error_code = ["call-arg"]
-
-# Add plugins for better support of third-party libraries
 plugins = ["pydantic.mypy"]
 
-# Add specific module ignores if needed
 [[tool.mypy.overrides]]
 module = ["sqlmodel", "fastapi"]
 ignore_missing_imports = true
-
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -159,10 +160,7 @@ ignore = ["CVS"]
 ignore-paths = ["^venv/.*$"]
 
 [tool.pylint.messages_control]
-disable = [
-    "missing-docstring",
-    "invalid-name",
-]
+disable = ["missing-docstring", "invalid-name", "import-error"]
 
 [tool.pylint.format]
 max-line-length = 119
